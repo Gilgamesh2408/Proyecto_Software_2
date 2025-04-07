@@ -9,4 +9,4 @@ class Compra(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)  # Fecha en la que se realiza la compra
 
     def __str__(self):
-        return f'{self.usuario} - {self.evento.nombre} - {self.cantidad} boletas'
+        return f'Compra hecha por {self.usuario} para el evento {self.evento.nombre}  y compro {self.cantidad} boletas '

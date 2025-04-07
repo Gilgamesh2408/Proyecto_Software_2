@@ -35,6 +35,7 @@ def comprar_boletas(request, evento_id):
         if cantidad <= evento_localidad.boletas_disponibles:
             # Descontar las boletas de la localidad
             evento_localidad.boletas_disponibles -= cantidad
+            
             evento_localidad.save()
 
             # Crear la compra
