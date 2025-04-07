@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Informe de Boletas Vendidas por Evento</h2>
+
+    <!-- Filtro de eventos -->
+    <form method="get" class="mb-3">
+        <div class="form-group row">
+            <label for="evento" class="col-sm-2 col-form-label">Seleccionar Evento:</label>
+            <div class="col-sm-6">
+                <select name="evento" id="evento" class="form-control" onchange="this.form.submit()">
+                    <option value="">Todos</option>
+                    {% for evento in eventos %}
+                        <option value="{{ evento.id }}" {% if evento.id == evento_seleccionado %}selected{% endif %}>
+                            {{ evento.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </form>
+
+    <!-- Gráfica -->
+    <canvas id="graficoEventos" width="400" height="200"></canvas>
+
+    <!-- Tabla de resumen -->
+    <table class="table table-bordered table-hover mt-3">
+        <thead>
+            <tr>
+                <th>Evento</th>
+                <th>Total Boletas Vendidas</th>
+                <th>Total Compras</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in resumen %}
+            <tr>
+                <td>{{ item.evento__nombre }}</td>
+                <td>{{ item.total_boletas }}</td>
+                <td>{{ item.total_compras }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Tabla de usuarios (si hay filtro) -->
+    {% if usuarios %}
+    <h4 class="mt-5">Usuarios que compraron para el evento</h4>
+    <table class="table table-sm table-striped">
+        <thead>
+            <tr>
+                <th>Nombre de Usuario</th>
+                <th>Cantidad Comprada</th>
+                <th>Fecha de Compra</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for compra in usuarios %}
+            <tr>
+                <td>{{ compra.usuario.username }}</td>
+                <td>{{ compra.cantidad }}</td>
+                <td>{{ compra.fecha|date:"Y-m-d H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const labels = [
+        {% for item in resumen %}
+            "{{ item.evento__nombre }}"
+        {% endfor %}
+    ];
+
+    const data = {
+        labels: labels,
+        datasets: [{
+            label: 'Boletas Vendidas',
+            data: [
+                {% for item in resumen %}
+                    {{ item.total_boletas }}
+                {% endfor %}
+            ],
+            backgroundColor: 'rgba(75, 192, 192, 0.7)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    };
+
+    const config = {
+        type: 'bar',
+        data: data,
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    };
+
+    new Chart(document.getElementById('graficoEventos'), config);
+</script>
+{% endblock %}
+

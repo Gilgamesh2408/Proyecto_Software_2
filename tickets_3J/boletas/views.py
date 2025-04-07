@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from eventos.models import Evento, Localidad, EventoLocalidad
-from .models import Compra
+from .models import Compra, Evento
+from django.db.models import Sum, Count
 
 
 
@@ -58,3 +59,23 @@ def comprar_boletas(request, evento_id):
 def confirmar_compra(request, evento_id):
     # Lógica para confirmar la compra
     return render(request, 'boletas/confirmar_compra.html', {'evento_id': evento_id})
+
+def reporte_eventos(request):
+    eventos = Evento.objects.all()
+    evento_id = request.GET.get('evento')  # obtenemos el filtro
+
+    resumen = Compra.objects.values('evento__nombre', 'evento__id') \
+        .annotate(total_boletas=Sum('cantidad'), total_compras=Count('id'))
+
+    if evento_id:
+        resumen = resumen.filter(evento__id=evento_id)
+        usuarios = Compra.objects.filter(evento__id=evento_id).select_related('usuario')
+    else:
+        usuarios = None
+
+    return render(request, 'reporte_eventos.html', {
+        'resumen': resumen,
+        'eventos': eventos,
+        'usuarios': usuarios,
+        'evento_seleccionado': int(evento_id) if evento_id else None
+    })
