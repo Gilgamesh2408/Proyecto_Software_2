@@ -21,8 +21,14 @@
         </div>
     </form>
 
-    <!-- Gráfica -->
+    <!-- Gráfica (solo si hay datos) -->
+    {% if resumen %}
     <canvas id="graficoEventos" width="400" height="200"></canvas>
+    {% else %}
+    <div class="alert alert-warning mt-3" role="alert">
+        No hay datos disponibles para generar la gráfica.
+    </div>
+    {% endif %}
 
     <!-- Tabla de resumen -->
     <table class="table table-bordered table-hover mt-3">
@@ -43,6 +49,8 @@
             {% endfor %}
         </tbody>
     </table>
+
+    
 
     <!-- Tabla de usuarios (si hay filtro) -->
     {% if usuarios %}
@@ -70,22 +78,16 @@
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{% if resumen %}
 <script>
-    const labels = [
-        {% for item in resumen %}
-            "{{ item.evento__nombre }}"
-        {% endfor %}
-    ];
+    const labels = [{% for item in resumen %}"{{ item.evento__nombre }}"{% if not forloop.last %}, {% endif %}{% endfor %}];
 
     const data = {
         labels: labels,
         datasets: [{
             label: 'Boletas Vendidas',
-            data: [
-                {% for item in resumen %}
-                    {{ item.total_boletas }}
-                {% endfor %}
-            ],
+            data: [{% for item in resumen %}{{ item.total_boletas|default:0 }}{% if not forloop.last %}, {% endif %}{% endfor %}],
             backgroundColor: 'rgba(75, 192, 192, 0.7)',
             borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 1
@@ -97,6 +99,11 @@
         data: data,
         options: {
             responsive: true,
+            plugins: {
+                legend: {
+                    display: true
+                }
+            },
             scales: {
                 y: {
                     beginAtZero: true
@@ -107,5 +114,7 @@
 
     new Chart(document.getElementById('graficoEventos'), config);
 </script>
+{% endif %}
 {% endblock %}
+
 
