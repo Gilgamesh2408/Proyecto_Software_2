@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extrahead %} 
+<title>Eventos</title>
+<link rel="stylesheet" href="{% static '/css/productos.css' %}">
+{% endblock extrahead %}
+
+{% block content %} 
+<h1 class="display-2 text-center" id="title">Eventos</h1>
+<p class="text-center">Explora nuestra amplia gama de eventos de alto nivel!</p>
+
+<div class="container text-center">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+        {% for evento in page_obj %}
+        <div class="col">
+            <div class="card h-100">
+                <!-- Verificar si el evento tiene imagen -->
+                <img src="{% if evento.imagen %}{{ evento.imagen.url }}{% else %}{% static 'images/default-image.jpg' %}{% endif %}" 
+                     class="imagen_producto" alt="Imagen de {{ evento.nombre }}">
+                <span class="badge rounded-pill text-bg-info estado_label">{{ evento.nombre }}</span>
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ evento.nombre|upper }}</h5>
+                    <p class="card-text">{{ evento.fecha|date:"d/m/Y H:i" }}</p>
+                    <a href="{% url 'detalleEvento' evento.id %}" class="btn btn-primary mt-auto">Detalles</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div> 
+
+    <!-- Paginación -->
+    <nav>
+        <ul class="pagination justify-content-center mt-4">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+            <li class="page-item active"><a class="page-link">{{ page_obj.number }}</a></li>
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>  
+</div>
+
+{% endblock content %}
+
+{% block extrajs %} 
+{% endblock extrajs %}  
+

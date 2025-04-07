@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extrahead %}
+<title>Detalle del Evento</title>
+<link rel="stylesheet" href="{% static 'css/detalle.css' %}">
+{% endblock extrahead %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="display-4 text-center mb-4" id="title">{{ evento.nombre }}</h1>
+
+    <div class="row align-items-center">
+        <!-- Imagen del evento -->
+        <div class="col-lg-6 col-md-12 text-center">
+            <img src="{% if evento.imagen %}{{ evento.imagen.url }}{% else %}{% static 'images/default-image.jpg' %}{% endif %}" 
+                 class="img-fluid rounded shadow-sm" 
+                 alt="Imagen de {{ evento.nombre }}">
+        </div>
+        
+        <!-- Información del evento -->
+        <div class="col-lg-6 col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">Detalles del Evento</h5>
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <th scope="row">ID</th>
+                                <td>{{ evento.id }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Nombre</th>
+                                <td>{{ evento.nombre }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Descripción</th>
+                                <td>{{ evento.descripcion }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Lugar</th>
+                                <td>{{ evento.lugar }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Fecha</th>
+                                <td>{{ evento.fecha|date:"d/m/Y H:i" }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="text-center mt-4">
+        <a type="button" class="btn btn-secondary me-2" href="{% url 'EventosIndex' %}">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+        <a href="{% url 'comprar_boletas' evento.id %}" class="btn btn-primary">
+            <i class="bi bi-ticket"></i> Comprar Boletas
+        </a>
+    </div>
+</div>
+{% endblock content %}

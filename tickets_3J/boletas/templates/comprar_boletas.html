@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block extrahead %}
+<title>Compra de Boletas</title>
+{% endblock extrahead %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="display-5 text-center mb-4">Compra de Boletas para <strong>{{ evento.nombre }}</strong></h2>
+    <p class="text-muted text-center">{{ evento.descripcion }}</p>
+
+    <!-- Mostrar mensajes de éxito/error -->
+    {% if messages %}
+        <div class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+
+    <!-- Formulario -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                
+                <!-- Seleccionar localidad -->
+                <div class="mb-4">
+                    <label for="localidad" class="form-label fw-bold">Selecciona la localidad:</label>
+                    <select name="localidad" id="localidad" class="form-select">
+                        {% for evento_localidad in localidades %}
+                            <option value="{{ evento_localidad.localidad.id }}" 
+                                    data-boletas-disponibles="{{ evento_localidad.boletas_disponibles }}">
+                                {{ evento_localidad.localidad.nombre }} 
+                                ({{ evento_localidad.boletas_disponibles }} boletas disponibles)
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Seleccionar cantidad -->
+                <div class="mb-4">
+                    <label for="cantidad" class="form-label fw-bold">Cantidad de boletas:</label>
+                    <input type="number" name="cantidad" id="cantidad" min="1" value="1" class="form-control" required>
+                    <div class="form-text">Máximo según disponibilidad de la localidad seleccionada.</div>
+                </div>
+
+                <!-- Botón de compra -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary w-100">Comprar Boletas</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Botón de volver -->
+    <div class="text-center mt-4">
+        <a href="{% url 'detalleEvento' evento.id %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+    </div>
+</div>
+
+<!-- Script para ajustar la cantidad de boletas según disponibilidad -->
+<script>
+    document.getElementById('localidad').addEventListener('change', function() {
+        var localidad = this.options[this.selectedIndex];
+        var boletasDisponibles = localidad.getAttribute('data-boletas-disponibles');
+        var cantidadInput = document.getElementById('cantidad');
+        cantidadInput.setAttribute('max', boletasDisponibles);
+
+        // Si la cantidad seleccionada excede el máximo, ajustarlo automáticamente
+        if (parseInt(cantidadInput.value) > boletasDisponibles) {
+            cantidadInput.value = boletasDisponibles;
+        }
+    });
+</script>
+{% endblock content %}
+
+
+

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extrahead %} 
+<title>eliminarReserva</title>
+{% endblock extrahead%}
+
+{% block content %} 
+<h1 class="display-3" id="title">Eliminar Reserva</h1>
+<p>Elimine los datos de la reserva</p>
+<form method="POST">
+    <!-- Security token by Django -->
+    {% csrf_token %}
+    Esta seguro de eliminar esta reserva?
+    <input type="submit" value="Si"  class="btn btn-success"  />
+    <a href="{% url 'detalleEvento' obj.boleta.evento.id %}"  class="btn btn-danger" >Cancel </a>
+</form> 
+
+
+{% endblock content%}

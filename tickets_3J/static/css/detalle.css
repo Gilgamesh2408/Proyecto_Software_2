@@ -1,0 +1,38 @@
+#title {
+    color: #5c5c8a;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.imagen_producto {
+    border-radius: 10px;
+    max-height: 400px;
+    object-fit: cover;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.table th {
+    color: #5c5c8a;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.table td {
+    font-size: 16px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 16px;
+}

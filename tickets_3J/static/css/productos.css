@@ -1,0 +1,65 @@
+/* Estilo para las imágenes de los eventos */
+.imagen_producto {
+    width: 100%; /* Ajusta al ancho del contenedor */
+    height: 200px; /* Altura fija para uniformidad */
+    object-fit: cover; /* Ajusta la imagen para que llene el espacio sin distorsión */
+    border-radius: 8px; /* Bordes redondeados para un diseño más elegante */
+}
+
+/* Espaciado y sombra en las tarjetas */
+.card {
+    margin-bottom: 20px; /* Espaciado entre las tarjetas */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+    border: none; /* Elimina bordes de las tarjetas */
+}
+
+/* Título principal */
+#title {
+    margin-bottom: 30px;
+    font-weight: bold;
+    color: #2c3e50; /* Color elegante */
+}
+
+/* Estilo para el texto del cuerpo de las tarjetas */
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #34495e; /* Color del título */
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #7f8c8d; /* Texto descriptivo */
+}
+
+/* Estilo del botón */
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+/* Paginación */
+.pagination .page-link {
+    color: #3498db;
+}
+
+.pagination .page-link:hover {
+    color: #fff;
+    background-color: #2980b9;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+/* General */
+.container {
+    padding-top: 20px;
+}

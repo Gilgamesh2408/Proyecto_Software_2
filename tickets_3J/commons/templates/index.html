@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extrahead %} 
+<title>Inicio</title>
+<link rel="stylesheet" href="{% static '/css/index.css' %}" >
+{% endblock extrahead%}
+
+{% block content %} 
+
+{% if messages %}
+	{% for message in messages %}
+    <div {% if message.tags == 'warning' %} class="alert alert-warning alert-message"{% else %} class="alert alert-success alert-message" {% endif %}>
+        <b class="message-alert">{{ message }}</b>       
+    </div>	
+	{% endfor %}
+{% endif %}
+
+<h1 class="display-2 text-center" id="title">Tickets 3J</h1>
+<img src="{% static '/img/portada.png' %}" class="img-fluid rounded mx-auto d-block" id="img_index" alt="Error cargando Imagen">
+<figure class="text-center">
+    <blockquote class="blockquote">
+      <p class="text_responsive">
+        <br><br>
+        <strong>¡Bienvenido a Sistema de Reservas Tickets 3J!</strong>
+        <br><br>
+        Nuestro sistema te permite descubrir y reservar entradas para los eventos más emocionantes en tu ciudad, ya sean conciertos, obras de teatro, o cualquier otro espectáculo. Con una interfaz intuitiva y fácil de usar, podrás explorar eventos disponibles, consultar detalles como fecha, lugar y tipo de evento, y seleccionar tus asientos favoritos en diversas localidades, como General, VIP o Palcos.
+        <br><br>
+        En <strong>3J</strong> queremos hacer que la experiencia de reservar tus entradas sea rápida, segura y sin complicaciones. Ya sea que estés planeando asistir a un evento especial o buscando nuevas experiencias, nuestro sistema te permitirá gestionar tus reservas con total comodidad desde la palma de tu mano.
+        <br><br>
+        <strong>Disfruta de los mejores eventos, al alcance de un clic. ¡Reserva ahora y asegura tu lugar!</strong>
+      </p>
+    </blockquote>
+    <figcaption class="blockquote-footer">
+      Tickets 3J</cite>
+    </figcaption>
+  </figure>
+{% endblock content%}

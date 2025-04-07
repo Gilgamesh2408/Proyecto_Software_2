@@ -1,0 +1,96 @@
+{% load static %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Incluir Bootstrap style en el todas las templates que heredan de esta base-->
+    <link rel="stylesheet" href="{% static '/css/bootstrap.min.css' %}" >
+    <link rel="stylesheet" href="{% static '/css/base.css' %}" >
+    <!--bloque para definir el título de la pagina web especifica y hacer los import adicionales necesarios-->
+    {% block extrahead %}   
+    {% endblock extrahead%}
+</head>
+<body>
+    <!--Insertando Navbar de Bootstrap-->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Tickets 3J</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="{% url 'index' %}">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'EventosIndex' %}">Eventos</a>
+            </li>        
+                
+            {% if user.is_superuser %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'admin:index' %}">Administración</a>
+            </li>
+            {% endif %}
+          </ul>
+          <form class="d-flex">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 left_bar">
+              <!--
+              <li class="nav-item">
+                <a class="nav-link" href="#">Carrito</a>
+              </li> -->
+              {% if user.is_authenticated %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle i" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Mi Cuenta
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="#">Mi perfil</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}" 
+                      onClick="document.getElementById('logoutform').submit()">
+                      Logout
+                    </a>
+                  </li>
+                  <form id="logoutform" method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <input type="hidden">
+                  </form>
+                </ul>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Log in</a>
+              </li>
+              {% endif %}
+            </ul>            
+          </form>
+        </div>
+      </div>
+    </nav>
+    <!--Contenido de la página web-->
+    <div class="container content" id="cont_body">
+        {% block content %}
+        {% endblock content%}
+    </div>
+    <div class="container-fluid">
+      <footer class="my-4">
+        <ul class="nav justify-content-center border-bottom mb-3">
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Inicio</a></li>
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Eventos</a></li>
+          {% if user.is_superuser %}
+          <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Administración</a></li>
+          {% endif %}
+        </ul>
+        <p class="text-center text-body-secondary">© 2024 Company, Inc</p>
+      </footer>
+    </div>
+    {% block extrajs %}
+    {% endblock extrajs%}
+    <!--Incluir Bootstrap code en el todas las templates que heredan de esta base-->
+    <script src="{% static '/js/bootstrap.bundle.min.js' %}" ></script>
+</body>
+</html>
