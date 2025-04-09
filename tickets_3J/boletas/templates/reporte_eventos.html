@@ -21,7 +21,7 @@
         </div>
     </form>
 
-    <!-- Gráfica (solo si hay datos) -->
+    <!-- Gráfica -->
     {% if resumen %}
     <canvas id="graficoEventos" width="400" height="200"></canvas>
     {% else %}
@@ -50,9 +50,7 @@
         </tbody>
     </table>
 
-    
-
-    <!-- Tabla de usuarios (si hay filtro) -->
+    <!-- Tabla de usuarios (si hay filtrado por evento) -->
     {% if usuarios %}
     <h4 class="mt-5">Usuarios que compraron para el evento</h4>
     <table class="table table-sm table-striped">

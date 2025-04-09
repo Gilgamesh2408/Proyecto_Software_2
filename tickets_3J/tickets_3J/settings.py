@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'boletas.apps.BoletasConfig',
     'eventos.apps.EventosConfig',
-    'commons.apps.CommonsConfig'
+    'commons.apps.CommonsConfig',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [

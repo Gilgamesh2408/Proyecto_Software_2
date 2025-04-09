@@ -4,7 +4,9 @@ from django.contrib.auth.decorators import login_required
 from eventos.models import Evento, Localidad, EventoLocalidad
 from .models import Compra, Evento
 from django.db.models import Sum, Count
-
+from .serializers import VentaSerializer
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 
 @login_required
@@ -79,3 +81,9 @@ def reporte_eventos(request):
         'usuarios': usuarios,
         'evento_seleccionado': int(evento_id) if evento_id else None
     })
+
+@api_view(['GET'])
+def obtener_ventas(request):
+    ventas = Compra.objects.all()  # Obtiene todas las ventas
+    serializer = VentaSerializer(ventas, many=True)  # Serializa los datos
+    return Response(serializer.data)  # Devuelve la respuesta en JSON
