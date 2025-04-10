@@ -19,7 +19,7 @@ class Evento(models.Model):
     tipo = models.CharField(max_length=50)
     total_boletas = models.PositiveIntegerField()  # Total de boletas para el evento
     imagen = models.FileField(upload_to="eventos/", null=True, blank=True)
-
+    activo = models.BooleanField(default=True) 
     def __str__(self):
         return self.nombre
 

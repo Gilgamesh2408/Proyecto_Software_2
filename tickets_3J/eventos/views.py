@@ -2,31 +2,37 @@ from django.shortcuts import redirect,get_object_or_404
 from django.http import HttpResponse
 from django.template import loader
 from django.core.paginator import Paginator
-from datetime import datetime
-
+from django.utils import timezone
 #from .forms import ProductoForm
 from .models import Evento,EventoLocalidad,Reserva
 
-# Vista principal de Productos
 def productosIndex(request):
-    # Consultar eventos y localidades
-    eventos = Evento.objects.all().order_by('id')  # Ordena por ID de forma ascendente
+    # Desactivar eventos cuya fecha ya pasó
+    hoy = timezone.now()
+    Evento.objects.filter(fecha__lt=hoy, activo=True).update(activo=False)
+
+    # Obtener solo eventos activos y ordenarlos por fecha descendente
+    eventos = Evento.objects.filter(activo=True).order_by('-fecha')
+
+    # Obtener todas las localidades
     eventos_Localidades = EventoLocalidad.objects.all()
 
-    # Configurar paginación para mostrar 9 eventos por página
-    paginator = Paginator(eventos, 9)
-
-    # Obtener el número de página desde la solicitud GET
-    page_number = request.GET.get('page', 1)  # Cambié el valor predeterminado de 0 a 1
+    # Configurar paginación (9 eventos por página)
+    paginator = Paginator(eventos, 6)
+    page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
 
-    # Obtener el template
+    # Cargar template
     template = loader.get_template("eventos.html")
 
-    # Agregar el contexto
-    context = {"page_obj": page_obj, "eventos": eventos, "Localidad": eventos_Localidades}
+    # Contexto para la plantilla
+    context = {
+        "page_obj": page_obj,
+        "eventos": eventos,
+        "Localidad": eventos_Localidades
+    }
 
-    # Retornar respuesta HTTP
+    # Retornar respuesta
     return HttpResponse(template.render(context, request))
 
 #Vista para ver detalles de un autor

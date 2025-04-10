@@ -8,3 +8,4 @@ urlpatterns = [
     path('reportes/eventos/', views.reporte_eventos, name='reporte_eventos'),
     path('api/ventas/', views.obtener_ventas, name='api-ventas'),
 ]
+# boletas/api/ventas/
