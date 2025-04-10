@@ -1,9 +1,10 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.template import loader
 from django.contrib.auth import login
 from django.contrib import messages
-
+from django.contrib.auth.decorators import login_required
+from boletas.models import Compra
 from .forms import NewUserForm
 
 # Create your views here.
@@ -25,3 +26,12 @@ def registro(request):
     context = {"register_form":form}
     template = loader.get_template("register.html")
     return HttpResponse(template.render(context,request))
+
+@login_required
+def perfil_usuario(request):
+    usuario = request.user
+    reservas = Compra.objects.filter(usuario=usuario)
+    return render(request, 'perfil.html', {
+        'usuario': usuario,
+        'reservas': reservas
+    })

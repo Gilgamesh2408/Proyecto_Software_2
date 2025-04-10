@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Mi Perfil</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            <p><strong>Nombre de usuario:</strong> {{ usuario.username }}</p>
+            <p><strong>Email:</strong> {{ usuario.email }}</p>
+        </div>
+    </div>
+
+    <h3>Mis Reservas</h3>
+    {% if reservas %}
+        <ul class="list-group">
+            {% for reserva in reservas %}
+                <li class="list-group-item">
+                    Evento: {{ reserva.evento.nombre }} <br>
+                    Fecha: {{ reserva.evento.fecha }} <br>
+                    Asientos: {{ reserva.cantidad}}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tienes reservas aún.</p>
+    {% endif %}
+</div>
+{% endblock %}

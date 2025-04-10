@@ -66,7 +66,7 @@ from django.utils import timezone
 from datetime import datetime
 
 def reporte_eventos(request): 
-    eventos = Evento.objects.all()
+    eventos = Evento.objects.all().order_by('nombre')
     evento_id = request.GET.get('evento')
     fecha_inicio = request.GET.get('fecha_inicio')
     fecha_fin = request.GET.get('fecha_fin')

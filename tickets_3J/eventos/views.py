@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.core.paginator import Paginator
 from django.utils import timezone
-#from .forms import ProductoForm
+from django.db.models import Q
 from .models import Evento,EventoLocalidad,Reserva
 
 def productosIndex(request):
@@ -11,30 +11,44 @@ def productosIndex(request):
     hoy = timezone.now()
     Evento.objects.filter(fecha__lt=hoy, activo=True).update(activo=False)
 
-    # Obtener solo eventos activos y ordenarlos por fecha descendente
-    eventos = Evento.objects.filter(activo=True).order_by('-fecha')
+    # Obtener parámetros de búsqueda
+    query = request.GET.get('q', '')
+    tipo = request.GET.get('tipo', '')
 
-    # Obtener todas las localidades
-    eventos_Localidades = EventoLocalidad.objects.all()
+    # Filtrar eventos activos
+    eventos = Evento.objects.filter(activo=True)
 
-    # Configurar paginación (9 eventos por página)
+    if query:
+        eventos = eventos.filter(nombre__icontains=query)
+
+    if tipo:
+        eventos = eventos.filter(tipo__icontains=tipo)
+
+    eventos = eventos.order_by('-fecha')
+
+    # Paginación
     paginator = Paginator(eventos, 6)
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
 
-    # Cargar template
-    template = loader.get_template("eventos.html")
+    # Localidades
+    eventos_Localidades = EventoLocalidad.objects.all()
 
-    # Contexto para la plantilla
+    # Tipos disponibles para el filtro
+    tipos = Evento.objects.values_list('tipo', flat=True).distinct()
+
+    # Renderizar plantilla
+    template = loader.get_template("eventos.html")
     context = {
         "page_obj": page_obj,
         "eventos": eventos,
-        "Localidad": eventos_Localidades
+        "Localidad": eventos_Localidades,
+        "tipos": tipos,
+        "query": query,
+        "tipo_selected": tipo
     }
 
-    # Retornar respuesta
     return HttpResponse(template.render(context, request))
-
 #Vista para ver detalles de un autor
 def detalleProducto(request, id):
     #Consultar producto

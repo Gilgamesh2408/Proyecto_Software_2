@@ -8,14 +8,36 @@
 
 {% block content %} 
 <h1 class="display-2 text-center" id="title">Eventos</h1>
-<p class="text-center">Explora nuestra amplia gama de eventos de alto nivel!</p>
 
+
+<div class="container my-4">
+    <form method="GET" class="row gy-2 gx-3 align-items-center justify-content-center">
+        <div class="col-auto">
+            <input type="text" name="q" class="form-control shadow-sm" placeholder="🔍 Buscar por nombre..." value="{{ query }}">
+        </div>
+        <div class="col-auto">
+            <select name="tipo" class="form-select shadow-sm">
+                <option value="">🎭 Todos los tipos</option>
+                {% for t in tipos %}
+                    <option value="{{ t }}" {% if tipo_selected == t %}selected{% endif %}>{{ t }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="bi bi-search"></i> Buscar
+            </button>
+            <a href="{% url 'EventosIndex' %}" class="btn btn-secondary">Limpiar</a>
+        </div>
+    </form>
+</div>
+
+<!-- Tarjetas de eventos -->
 <div class="container text-center">
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
         {% for evento in page_obj %}
         <div class="col">
             <div class="card h-100">
-                <!-- Verificar si el evento tiene imagen -->
                 <img src="{% if evento.imagen %}{{ evento.imagen.url }}{% else %}{% static 'images/default-image.jpg' %}{% endif %}" 
                      class="imagen_producto" alt="Imagen de {{ evento.nombre }}">
                 <span class="badge rounded-pill text-bg-info estado_label">{{ evento.nombre }}</span>
@@ -25,6 +47,10 @@
                     <a href="{% url 'detalleEvento' evento.id %}" class="btn btn-primary mt-auto">Detalles</a>
                 </div>
             </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="text-center">No se encontraron eventos con esos filtros.</p>
         </div>
         {% endfor %}
     </div> 
